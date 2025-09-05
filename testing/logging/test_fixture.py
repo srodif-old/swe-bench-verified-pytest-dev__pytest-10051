@@ -151,6 +151,27 @@ def test_clear(caplog):
     assert not caplog.text
 
 
+def test_clear_preserves_get_records_reference(caplog):
+    """Test that caplog.clear() does not break caplog.get_records()."""
+    def verify_consistency():
+        assert caplog.get_records("call") == caplog.records
+
+    # Initially consistent
+    verify_consistency()
+    
+    # Add a log record  
+    logger.warning("test message")
+    verify_consistency()
+    
+    # Clear should maintain consistency
+    caplog.clear()
+    verify_consistency()
+    
+    # Add another record after clear to verify it works
+    logger.info("after clear")
+    verify_consistency()
+
+
 @pytest.fixture
 def logging_during_setup_and_teardown(caplog):
     caplog.set_level("INFO")
