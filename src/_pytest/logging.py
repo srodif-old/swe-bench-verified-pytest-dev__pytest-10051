@@ -342,7 +342,7 @@ class LogCaptureHandler(logging_StreamHandler):
         super().emit(record)
 
     def reset(self) -> None:
-        self.records = []
+        self.records.clear()
         self.stream = StringIO()
 
     def handleError(self, record: logging.LogRecord) -> None:
